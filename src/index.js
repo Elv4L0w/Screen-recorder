@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, desktopCapturer, ipcMain, Menu } = require('electron');
 const path = require('node:path');
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -12,7 +13,9 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+          preload: path.join(__dirname, 'preload.js'), 
+      contextIsolation: true,                     
+      nodeIntegration: false
     },
   });
 
@@ -49,3 +52,19 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
+ipcMain.handle('get-sources', async () => {
+  const sources = await desktopCapturer.getSources({ types: ['window', 'screen'] });
+  console.log("📺 Detected sources:", sources.map(s => s.name));
+  return sources;
+});
+
+ipcMain.handle('show-menu', async (event, template) => {
+  const menuTemplate = template.map(item => ({
+    label: item.label,
+    click: () => event.sender.send('menu-item-clicked', item.label)
+  }));
+
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  menu.popup();
+});
+
