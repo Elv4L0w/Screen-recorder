@@ -13,6 +13,6 @@ Allows selecting a screen or window, previewing it, and recording to `.webm` for
 ## Installation
 ```bash
 clone the repo
-cd to my-app
+cd my-app
 npm install
 npm start
