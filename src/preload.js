@@ -8,5 +8,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   showMenu: (template) => ipcRenderer.invoke('show-menu', template),
   onMenuItemClicked: (callback) => ipcRenderer.on('menu-item-clicked', (event, label) => callback(label))
 });
-
+//test
 
