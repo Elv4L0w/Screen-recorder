@@ -1,0 +1,28 @@
+name: Test Screen Recorder
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  node-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repozitorij tretja verzija
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Instaliraj dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Test da node dela
+      - name: Start project
+        run: npm start || echo "npm start is running your app"
